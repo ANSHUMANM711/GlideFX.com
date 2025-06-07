@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Currency Converter with Theme Toggle Button & Flags</title>
+<style>
+  :root {
+    --yellow: #f8c300;
+    --black: #111;
+    --white: #fff;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--white);
+    color: var(--black);
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  body.dark {
+    background-color: var(--black);
+    color: var(--yellow);
+  }
+  header {
+    background-color: var(--yellow);
+    color: var(--black);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  body.dark header {
+    background-color: var(--black);
+    color: var(--yellow);
+  }
+  button#theme-btn {
+    cursor: pointer;
+    padding: 8px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--black);
+    color: var(--yellow);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  body.dark button#theme-btn {
+    background-color: var(--yellow);
+    color: var(--black);
+  }
+  main {
+    max-width: 450px;
+    margin: 50px auto;
+    background-color: var(--yellow);
+    color: var(--black);
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    transition: background-color 0.4s ease, color 0.4s ease;
+  }
+  body.dark main {
+    background-color: var(--black);
+    color: var(--yellow);
+    box-shadow: 0 0 20px var(--yellow);
+  }
+
+  /* About and Contact with hover bigger box */
+  nav {
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  nav a:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+  .tooltip {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--yellow);
+    color: var(--black);
+    padding: 15px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    width: 250px;
+    max-width: 80vw;
+    text-align: center;
+    z-index: 20;
+  }
+  body.dark .tooltip {
+    background-color: var(--black);
+    color: var(--yellow);
+    box-shadow: 0 0 10px var(--yellow);
+  }
+
+  /* Currency converter inputs */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  input[type="number"] {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: 95% center;
+  }
+  button.convert-btn {
+    background-color: var(--black);
+    color: var(--yellow);
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 12px 0;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button.convert-btn:hover {
+    background-color: #333;
+  }
+  body.dark button.convert-btn {
+    background-color: var(--yellow);
+    color: var(--black);
+  }
+  body.dark button.convert-btn:hover {
+    background-color: #ffd633;
+  }
+
+  /* Result output */
+  #result {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  /* Flags inside options using emojis */
+  option[data-flag]::before {
+    content: attr(data-flag) " ";
+  }
+
+  /* Responsive */
+  @media (max-width: 500px) {
+    main {
+      margin: 20px;
+      padding: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h2>Currency Converter💸🌏</h2>
+  <button id="theme-btn">Dark Mode</button>
+</header>
+
+<nav style="max-width:450px; margin:10px auto; justify-content:center;">
+  <a href="#" tabindex="0">About
+    <span class="tooltip">Hello guys Anshuman Mishra from this side❤️, I hope you guys enjoying this amazing converter. If you have any problem feel free to contact us🤵.</span>
+  </a>
+  <a href="#" tabindex="0">Contact
+    <span class="tooltip">Contact us at kumsh789@gmail.com <br> 24X7 AVAILABLE🔧 </span>
+  </a>
+</nav>
+
+<main>
+  <form id="converter-form">
+    <input
+      type="number"
+      id="amount"
+      placeholder="Enter amount"
+      value=""
+      min="0"
+      required
+    />
+    <select id="from-currency" required>
+      <!-- 20 currencies with flags -->
+      <option value="USD" data-flag="🇺🇸">USD - US Dollar</option>
+      <option value="EUR" data-flag="🇪🇺">EUR - Euro</option>
+      <option value="INR" data-flag="🇮🇳" selected>INR - Indian Rupee</option>
+      <option value="GBP" data-flag="🇬🇧">GBP - British Pound</option>
+      <option value="JPY" data-flag="🇯🇵">JPY - Japanese Yen</option>
+      <option value="CAD" data-flag="🇨🇦">CAD - Canadian Dollar</option>
+      <option value="AUD" data-flag="🇦🇺">AUD - Australian Dollar</option>
+      <option value="CHF" data-flag="🇨🇭">CHF - Swiss Franc</option>
+      <option value="CNY" data-flag="🇨🇳">CNY - Chinese Yuan</option>
+      <option value="NZD" data-flag="🇳🇿">NZD - New Zealand Dollar</option>
+      <option value="SGD" data-flag="🇸🇬">SGD - Singapore Dollar</option>
+      <option value="ZAR" data-flag="🇿🇦">ZAR - South African Rand</option>
+      <option value="RUB" data-flag="🇷🇺">RUB - Russian Ruble</option>
+      <option value="BRL" data-flag="🇧🇷">BRL - Brazilian Real</option>
+      <option value="MXN" data-flag="🇲🇽">MXN - Mexican Peso</option>
+      <option value="KRW" data-flag="🇰🇷">KRW - South Korean Won</option>
+      <option value="TRY" data-flag="🇹🇷">TRY - Turkish Lira</option>
+      <option value="AED" data-flag="🇦🇪">AED - UAE Dirham</option>
+      <option value="SAR" data-flag="🇸🇦">SAR - Saudi Riyal</option>
+      <option value="ILS" data-flag="🇮🇱">ILS - Israeli Shekel</option>
+    </select>
+
+    <select id="to-currency" required>
+      <!-- Same 20 currencies -->
+      <option value="USD" data-flag="🇺🇸">USD - US Dollar</option>
+      <option value="EUR" data-flag="🇪🇺">EUR - Euro</option>
+      <option value="INR" data-flag="🇮🇳" selected>INR - Indian Rupee</option>
+      <option value="GBP" data-flag="🇬🇧">GBP - British Pound</option>
+      <option value="JPY" data-flag="🇯🇵">JPY - Japanese Yen</option>
+      <option value="CAD" data-flag="🇨🇦">CAD - Canadian Dollar</option>
+      <option value="AUD" data-flag="🇦🇺">AUD - Australian Dollar</option>
+      <option value="CHF" data-flag="🇨🇭">CHF - Swiss Franc</option>
+      <option value="CNY" data-flag="🇨🇳">CNY - Chinese Yuan</option>
+      <option value="NZD" data-flag="🇳🇿">NZD - New Zealand Dollar</option>
+      <option value="SGD" data-flag="🇸🇬">SGD - Singapore Dollar</option>
+      <option value="ZAR" data-flag="🇿🇦">ZAR - South African Rand</option>
+      <option value="RUB" data-flag="🇷🇺">RUB - Russian Ruble</option>
+      <option value="BRL" data-flag="🇧🇷">BRL - Brazilian Real</option>
+      <option value="MXN" data-flag="🇲🇽">MXN - Mexican Peso</option>
+      <option value="KRW" data-flag="🇰🇷">KRW - South Korean Won</option>
+      <option value="TRY" data-flag="🇹🇷">TRY - Turkish Lira</option>
+      <option value="AED" data-flag="🇦🇪">AED - UAE Dirham</option>
+      <option value="SAR" data-flag="🇸🇦">SAR - Saudi Riyal</option>
+      <option value="ILS" data-flag="🇮🇱">ILS - Israeli Shekel</option>
+    </select>
+
+    <button type="submit" class="convert-btn">Convert</button>
+  </form>
+
+  <div id="result"></div>
+</main>
+
+<script>
+  const themeBtn = document.getElementById('theme-btn');
+  themeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    themeBtn.textContent = document.body.classList.contains('dark') ? 'Light Mode' : 'Dark Mode';
+  });
+
+  const form = document.getElementById('converter-form');
+  const resultDiv = document.getElementById('result');
+
+  // Using ExchangeRate-API free tier for demo purposes
+  // You can get your own API key from https://www.exchangerate-api.com/
+  const API_KEY = "https://api.exchangerate-api.com/v4/latest/";
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const amount = parseFloat(document.getElementById('amount').value);
+    const fromCurrency = document.getElementById('from-currency').value;
+    const toCurrency = document.getElementById('to-currency').value;
+
+    if(amount <= 0) {
+      resultDiv.textContent = "Please enter a valid amount greater than 0.";
+      return;
+    }
+
+    if(fromCurrency === toCurrency) {
+      resultDiv.textContent = "Please select two different currencies.";
+      return;
+    }
+
+    resultDiv.textContent = "Converting...";
+
+    try {
+      const res = await fetch(API_KEY + fromCurrency);
+      if (!res.ok) throw new Error("Failed to fetch exchange rates.");
+      const data = await res.json();
+
+      const rate = data.rates[toCurrency];
+      if (!rate) {
+        resultDiv.textContent = "Currency not supported.";
+        return;
+      }
+
+      const converted = (amount * rate).toFixed(4);
+
+      resultDiv.innerHTML = `${amount} <b>${fromCurrency}</b> = <b>${converted} ${toCurrency}</b>`;
+    } catch (err) {
+      resultDiv.textContent = "Error: " + err.message;
+    }
+  });
+</script>
+
+</body>
+</html>
